@@ -1,0 +1,40 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+
+START=99
+
+MAC_ADDR=$(ifconfig br-lan | grep -oE '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}')
+
+# 格式化MAC地址去掉冒号
+FORMATTED_MAC=$(echo $MAC_ADDR | sed 's/://g')
+
+# 构造订阅URL
+SUBSCRIBE_URL="https://www.mschoolwifi.me/$FORMATTED_MAC"
+
+# 检查是否已存在订阅链接
+EXISTING_URL=$(uci get shadowsocksr.@server_subscribe[0].subscribe_url 2>/dev/null)
+
+if [ -n "$EXISTING_URL" ]; then
+    # 如果存在订阅链接，进行替换
+    uci set shadowsocksr.@server_subscribe[0].subscribe_url="$SUBSCRIBE_URL"
+else
+    # 如果不存在订阅链接，添加新链接
+    uci add_list shadowsocksr.@server_subscribe[0].subscribe_url="$SUBSCRIBE_URL"
+fi
+
+# 保存并应用配置
+uci commit shadowsocksr
+
+sed -i '/DISTRIB_REVISION/d' /etc/openwrt_release
+echo "DISTRIB_REVISION='R24.9.1'" >> /etc/openwrt_release
+sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
+echo "DISTRIB_DESCRIPTION='MS校园网&闲鱼MSWIFI路由器 @ $FORMATTED_MAC '" >> /etc/openwrt_release
+echo "DISTRIB_TARGET='$FORMATTED_MAC'" >> /etc/openwrt_release
+
+
+
+
+
+
+
+
