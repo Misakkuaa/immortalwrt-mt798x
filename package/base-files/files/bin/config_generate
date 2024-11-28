@@ -531,3 +531,34 @@ if [ ! -s /etc/config/system ]; then
 	for key in $keys; do generate_led $key; done
 fi
 uci commit
+##设置TTL
+uci add firewall redirect
+uci set firewall.@redirect[-1].name='Intercept-NTP'
+uci set firewall.@redirect[-1].src='lan'
+uci set firewall.@redirect[-1].src_dport='123'
+uci set firewall.@redirect[-1].proto="udp"
+uci set firewall.@redirect[-1].family="any"
+uci set firewall.@redirect[-1].target='DNAT'
+uci commit firewall
+##拦截ntp对时
+uci add firewall redirect
+uci set firewall.@redirect[-1].name='Intercept-DNS'
+uci set firewall.@redirect[-1].src='lan'
+uci set firewall.@redirect[-1].src_dport='53'
+uci set firewall.@redirect[-1].proto="tcp udp"
+uci set firewall.@redirect[-1].family="any"
+uci set firewall.@redirect[-1].target='DNAT'
+uci commit firewall
+##拦截DNS解析
+sed -i 's#openwrt.pool.ntp.org#cn.pool.ntp.org#g' /etc/config/system
+uci set system.ntp.enable_server=1
+uci commit system
+##开启NTP服务
+uci set network.wan.hostname='*'
+uci commit network
+##不发送主机名
+
+uci commit
+
+
+opkg remove luci-app-opkg --force-depends
