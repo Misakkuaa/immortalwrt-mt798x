@@ -559,6 +559,10 @@ uci commit network
 ##不发送主机名
 
 uci commit
-
+sed -i '/DISTRIB_REVISION/d' /etc/openwrt_release
+echo "DISTRIB_REVISION='R24.9.1'" >> /etc/openwrt_release
+sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
+echo "DISTRIB_DESCRIPTION='MS校园网&闲鱼MSWIFI路由器 @ $FORMATTED_MAC '" >> /etc/openwrt_release
+echo "DISTRIB_TARGET='$FORMATTED_MAC'" >> /etc/openwrt_release
 
 opkg remove luci-app-opkg --force-depends
