@@ -26,11 +26,11 @@ detect_mtwifi() {
 				if [ "$band" = "2g" ]; then
 					htmode="HE40"
 					htbsscoex="1"
-					ssid="ImmortalWrt-2.4G"
+					ssid="MSWrt-2.4G"
 				elif [ "$band" = "5g" ]; then
 					htmode="HE160"
 					htbsscoex="0"
-					ssid="ImmortalWrt-5G"
+					ssid="MSWrt-5G"
 				elif [ "$band" = "6g" ]; then
 					htmode="HE160"
 					htbsscoex="0"
