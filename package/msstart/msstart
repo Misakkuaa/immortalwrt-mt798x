@@ -15,7 +15,7 @@ echo "DISTRIB_REVISION='250101'" >> /etc/openwrt_release
 sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
 echo "DISTRIB_DESCRIPTION='MS校园网&闲鱼MSWIFI路由器 @ $ID&'" >> /etc/openwrt_release
 echo "DISTRIB_TARGET='$ID'" >> /etc/openwrt_release
-
+sed -i "s/option force_dns '0'/option force_dns '1'/" /etc/config/https-dns-proxy
 sed -i "s/option enable '1'/option enable '0'/" /etc/config/scutclient
 rm -f /etc/init.d/msstart
 
