@@ -162,7 +162,7 @@ generate_network() {
 		static)
 			local ipad
 			case "$1" in
-				lan) ipad=${ipaddr:-"192.168.1.1"} ;;
+				lan) ipad=${ipaddr:-"192.168.66.1"} ;;
 				*) ipad=${ipaddr:-"192.168.$((addr_offset++)).1"} ;;
 			esac
 
@@ -559,10 +559,11 @@ uci commit network
 ##不发送主机名
 
 uci commit
+
+MAC_ADDR=$(ifconfig br-lan | grep -oE '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}')
+FORMATTED_MAC=$(echo $MAC_ADDR | sed 's/://g')
 sed -i '/DISTRIB_REVISION/d' /etc/openwrt_release
-echo "DISTRIB_REVISION='R24.9.1'" >> /etc/openwrt_release
+echo "DISTRIB_REVISION='R250101'" >> /etc/openwrt_release
 sed -i '/DISTRIB_DESCRIPTION/d' /etc/openwrt_release
 echo "DISTRIB_DESCRIPTION='MS校园网&闲鱼MSWIFI路由器 @ $FORMATTED_MAC '" >> /etc/openwrt_release
 echo "DISTRIB_TARGET='$FORMATTED_MAC'" >> /etc/openwrt_release
-
-opkg remove luci-app-opkg --force-depends
