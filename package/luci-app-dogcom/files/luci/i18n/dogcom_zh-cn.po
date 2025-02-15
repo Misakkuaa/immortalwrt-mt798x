@@ -9,7 +9,7 @@ msgstr ""
 msgid "Dogcom config"
 msgstr "Dogcom 设置"
 
-msgid "Dogcom"
+msgid "dogcom"
 msgstr "Drcom客户端"
 
 msgid "Dogcom is running."
